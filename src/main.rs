@@ -23,7 +23,9 @@ fn main() {
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
     for line in contents.lines() {
-        search(line, config.query);
+        if let Some(s) = search(line, config.query) {
+            println!("{s}");
+        }
     }
     Ok(())
 }
