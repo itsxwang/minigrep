@@ -10,7 +10,7 @@ fn main() {
     });
 
     println!(
-        "SET ENV:\nCASE=0 => For Case INSENITIVE\nCASE=1 => For Case SMART\nCASE=2 (default) => For Case SENSITIVE\n",
+        "SET ENV OR SET ARGS(more priority):\nCASE=0 => For Case INSENITIVE\nCASE=1 => For Case SMART\nCASE=2 (default) => For Case SENSITIVE\n",
     );
     println!(
         "----------- Searching for `{}` in `{}` -----------\n",
@@ -27,12 +27,12 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
     for line in contents.lines() {
         match config.case {
-            "smart" => {
+            "1" => {
                 if let Some(s) = search_case_smart(line, config.query) {
                     print_matches(s);
                 }
             }
-            "insensitive" => {
+            "0" => {
                 if let Some(s) = search_case_insensitive(line, config.query) {
                     print_matches(s);
                 }
@@ -59,22 +59,29 @@ struct Config<'a> {
 }
 impl Config<'_> {
     fn build<'a>(args: &'a [String]) -> Result<Config<'a>, &'static str> {
+        let case: &str;
+        let query: &str;
+        let file_path: &str;
+
         if args.len() < 3 {
             return Err("not enough arguments");
-        }
-        let query = &args[1];
-        let file_path = &args[2];
+        } else if args.len() > 3 {
+            query = &args[1];
+            file_path = &args[2];
+            case = &args[3];
+        } else {
+            query = &args[1];
+            file_path = &args[2];
 
-        let case = match env::var("CASE") {
-            Ok(val) => {
-                match val.as_str() {
-                    "0" => "insensitive",
-                    "1" => "smart",
-                    _ => "sensitive",
-                }
-            }
-            Err(_) => "sensitive",
-        };
+            case = match env::var("CASE") {
+                Ok(val) => match val.as_str() {
+                    "0" => "0",
+                    "1" => "1",
+                    _ => "2",
+                },
+                Err(_) => "2",
+            };
+        }
 
         Ok(Config {
             query,
