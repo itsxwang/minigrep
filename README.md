@@ -35,8 +35,11 @@ You can also control case sensitivity by setting the `CASE` environment variable
 # For a case-insensitive search by default
 export CASE=0
 
-# For a case-sensitive search by default
+# For searching with smartcase
 export CASE=1
+
+# For a case-sensitive search (by default)
+export CASE=2
 ```
 
 **Note:** A `case_flag` argument provided on the command line will always override the `CASE` environment variable for that specific command.
