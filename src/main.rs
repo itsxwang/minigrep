@@ -10,7 +10,7 @@ fn main() {
     });
 
     println!(
-        "SET ENV OR SET ARGS(more priority):\nCASE=0 => For Case INSENITIVE\nCASE=1 => For Case SMART\nCASE=2 (default) => For Case SENSITIVE\n",
+        "SET ENV OR SET ARGS(more priority):\nCASE=0 => For Case INSENSITIVE\nCASE=1 => For Case SMART\nCASE=2 (default) => For Case SENSITIVE\n",
     );
     println!(
         "----------- Searching for `{}` in `{}` -----------\n",
